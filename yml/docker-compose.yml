@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  node1:
+    image: jaruwit178/network:latest
+    environment:
+      NODE_ID: 1
+    ports:
+      - "5001:5000"
+
+  node2:
+    image: jaruwit178/network:latest
+    environment:
+      NODE_ID: 2
+    ports:
+      - "5002:5000"
+
+  node3:
+    image: jaruwit178/network:latest
+    environment:
+      NODE_ID: 3
+    ports:
+      - "5003:5000"
+
+  node4:
+    image: jaruwit178/network:latest
+    environment:
+      NODE_ID: 4
+    ports:
+      - "5004:5000"
