@@ -1,0 +1,5 @@
+FROM openjdk:11
+WORKDIR /app
+COPY Server.java .
+RUN javac Server.java
+CMD ["java", "Server"]
