@@ -13,13 +13,15 @@ def calculate_distance(sequence):
 permutations = list(itertools.permutations(cities))
 
 # Establish TCP/IP connections with each node
-nodes = ['192.168.0.1', '192.168.0.2', '192.168.0.3', '192.168.0.4']
+nodes = ['node1', 'node2', 'node3', 'node4']
 node_count = len(nodes)
 connections = []
 
-for node_ip in nodes:
+for node_name in nodes:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((node_ip, 9999))
+    container_hostname = node_name
+    container_port = 9999
+    sock.connect((container_hostname, container_port))
     connections.append(sock)
 
 # Iterate through permutations and send to all nodes
