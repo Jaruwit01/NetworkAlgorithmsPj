@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class TCPServer {
     public static void main(String[] args) {
@@ -14,8 +15,19 @@ public class TCPServer {
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 
                 // Send the sequence of cities to the client
-                String cities = "CityA CityB CityC CityD"; // Replace with your own city sequence
-                out.println(cities);
+                String[] cities = {"city1", "city2", "city3", "city4"} ; // Replace with your own city sequence
+                Scanner  scanner = new Scanner(System.in);
+                for (String city : cities) {
+                    out.println(city);
+                    System.out.println("Sent city: " + city);
+                    String message = scanner.nextLine();
+                    out.println(city+message);
+                }
+                // System.out.println("Enter your message: ");
+                // String message = scanner.nextLine();
+                // out.println(""+message);
+                // out.println(cities);
+
 
                 clientSocket.close();
             }
