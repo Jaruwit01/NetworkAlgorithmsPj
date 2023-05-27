@@ -12,9 +12,6 @@ import java.util.logging.Logger;
 public class TCPServer {
     public static void main(String[] args) {
         ServerSocket serverSocket = null;
-        Socket sc = null;
-        DataInputStream input;
-        DataOutputStream output;
         final int PORT = 5000;
 
         try {
@@ -22,11 +19,40 @@ public class TCPServer {
             System.out.println("Server started");
 
             while (true) {
-                sc = serverSocket.accept();
+                Socket clientSocket = serverSocket.accept();
                 System.out.println("Client connected");
 
-                input = new DataInputStream(sc.getInputStream());
-                output = new DataOutputStream(sc.getOutputStream());
+                Thread clientThread = new ClientHandler(clientSocket);
+                clientThread.start();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (serverSocket != null) {
+                    serverSocket.close();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    // Client Handler Thread
+    private static class ClientHandler extends Thread {
+        private Socket clientSocket;
+        private DataInputStream input;
+        private DataOutputStream output;
+
+        public ClientHandler(Socket socket) {
+            this.clientSocket = socket;
+        }
+
+        @Override
+        public void run() {
+            try {
+                input = new DataInputStream(clientSocket.getInputStream());
+                output = new DataOutputStream(clientSocket.getOutputStream());
 
                 // Read the number of cities from the client
                 int numCities = input.readInt();
@@ -46,12 +72,12 @@ public class TCPServer {
                 routeBuilder.setLength(routeBuilder.length() - 4); // Remove the trailing "->"
                 output.writeUTF(routeBuilder.toString());
 
-                sc.close();
+                clientSocket.close();
                 System.out.println("Client disconnected");
-            }
 
-        } catch (IOException ex) {
-            Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -77,56 +103,18 @@ public class TCPServer {
 
     // Method to calculate the optimal route based on the nearest city
     private static List<String> calculateOptimalRoute(List<String> cities, double[][] coordinates) {
-        List<String> route = new ArrayList<>();
-        List<String> remainingCities = new ArrayList<>(cities);
+        // Implement your logic to calculate the optimal route here
+        // This code is just a placeholder
+
+        // Randomly shuffle the cities
+        List<String> route = new ArrayList<>(cities);
         Random random = new Random();
-
-        // Select a random starting city
-        int startIndex = random.nextInt(remainingCities.size());
-        String currentCity = remainingCities.get(startIndex);
-        route.add(currentCity);
-        remainingCities.remove(startIndex);
-
-        while (!remainingCities.isEmpty()) {
-            int minIndex = -1;
-            double minDistance = Double.MAX_VALUE;
-
-            // Find the nearest remaining city
-            for (int i = 0; i < remainingCities.size(); i++) {
-                String city = remainingCities.get(i);
-                int currentIndex = getIndex(currentCity, cities);
-                int cityIndex = getIndex(city, cities);
-                double distance = getDistance(coordinates[currentIndex], coordinates[cityIndex]);
-
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    minIndex = i;
-                }
-            }
-
-            // Add the nearest city to the route
-            currentCity = remainingCities.get(minIndex);
-            route.add(currentCity);
-            remainingCities.remove(minIndex);
+        for (int i = 0; i < route.size(); i++) {
+            int j = random.nextInt(route.size());
+            String temp = route.get(i);
+            route.set(i, route.get(j));
+            route.set(j, temp);
         }
-
         return route;
-    }
-
-    // Method to get the index of a city in the list
-    private static int getIndex(String city, List<String> cities) {
-        for (int i = 0; i < cities.size(); i++) {
-            if (cities.get(i).equals(city)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    // Method to calculate the Euclidean distance between two coordinates
-    private static double getDistance(double[] coord1, double[] coord2) {
-        double dx = coord1[0] - coord2[0];
-        double dy = coord1[1] - coord2[1];
-        return Math.sqrt(dx * dx + dy * dy);
     }
 }
