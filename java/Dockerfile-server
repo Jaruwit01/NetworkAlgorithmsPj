@@ -1,0 +1,9 @@
+FROM openjdk:8-jdk-alpine
+
+COPY TCPServer.java /app/TCPServer.java
+
+WORKDIR /app
+
+RUN javac TCPServer.java
+
+CMD ["java", "TCPServer"]

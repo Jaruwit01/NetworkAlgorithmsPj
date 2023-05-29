@@ -1,0 +1,9 @@
+FROM openjdk:8-jdk-alpine
+
+COPY TCPClient.java /app/TCPClient.java
+
+WORKDIR /app
+
+RUN javac TCPClient.java
+
+CMD ["java", "TCPClient"]
