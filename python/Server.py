@@ -13,8 +13,12 @@ def solve_tsptw(data):
         'D': {'A': 20, 'B': 30, 'C': 35, 'D': 0}
     }
 
-    shortest_route = cities[::-1]  # Reversed route for demonstration purposes
-    shortest_distance = calculate_distance(shortest_route[::-1], distance_matrix)
+    shortest_route = []
+    shortest_distance = float('inf')
+    start_city = cities[0]
+    visited = [False] * len(cities)
+
+    find_shortest_route(start_city, cities, distance_matrix, shortest_route, visited, 0, shortest_distance)
 
     result = {
         'route': shortest_route,
@@ -23,13 +27,24 @@ def solve_tsptw(data):
 
     return result
 
-def calculate_distance(route, distance_matrix):
-    distance = 0
-    for i in range(len(route) - 1):
-        current_city = route[i]
-        next_city = route[i + 1]
-        distance += distance_matrix[current_city][next_city]
-    return distance
+def find_shortest_route(city, cities, distance_matrix, route, visited, current_distance, shortest_distance):
+    route.append(city)
+    visited[cities.index(city)] = True
+
+    if all(visited):
+        route.append(cities[0])  # Add the starting city to complete the route
+        current_distance += distance_matrix[city][cities[0]]
+        shortest_distance = min(shortest_distance, current_distance)
+        return
+
+    for next_city in cities:
+        if not visited[cities.index(next_city)]:
+            new_distance = current_distance + distance_matrix[city][next_city]
+            if new_distance < shortest_distance:
+                find_shortest_route(next_city, cities, distance_matrix, route, visited, new_distance, shortest_distance)
+
+    visited[cities.index(city)] = False
+    route.pop()
 
 def start_server():
     host = '0.0.0.0'   # Listen on all available network interfaces

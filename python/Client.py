@@ -27,8 +27,10 @@ def send_data(city_name, city_data):
         client_socket.close()
 
 # Test the code
-cityD_name = 'City C'
-cityD_data = 'A B C D'  # Example city data
-send_data(cityD_name, cityD_data)
+cityA_name = 'City D'
+cityA_data = 'A B C D'  # Example city data
+send_data(cityA_name, cityA_data)
 
-
+# cityB_name = 'City B'
+# cityB_data = 'A D C B'  # Example city data
+# send_data(cityB_name, cityB_data)
