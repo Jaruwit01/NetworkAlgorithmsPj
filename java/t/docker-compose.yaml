@@ -1,0 +1,41 @@
+version: '3'
+services:
+  server1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./TSPServer.java:/app/TSPServer.java
+    ports:
+      - '1233:1233'
+    command: javac TSPServer.java && java TSPServer
+
+  server2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./TSPServer.java:/app/TSPServer.java
+    ports:
+      - '1234:1233'
+    command: javac TSPServer.java && java TSPServer
+
+  server3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./TSPServer.java:/app/TSPServer.java
+    ports:
+      - '1235:1233'
+    command: javac TSPServer.java && java TSPServer
+
+  server4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./TSPServer.java:/app/TSPServer.java
+    ports:
+      - '1236:1233'
+    command: javac TSPServer.java && java TSPServer

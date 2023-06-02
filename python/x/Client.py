@@ -15,7 +15,7 @@ def send_data(server_ip, city, city_name, distance):
         client_socket.connect((server_ip, 5400))
 
         # Prepare the data to send
-        data = city_name + ':' + distance
+        data = city_name + ' ' + distance
 
         # Send the data to the server
         client_socket.sendall(data.encode())

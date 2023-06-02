@@ -52,12 +52,15 @@ def handle_client(client_socket, client_address):
     data = client_socket.recv(1024).decode()
     print("Received data:", data)
 
-    # Extract the city name from the received data
-    city_name, city_data = data.split(':')
-    print(city_name, "is", city_data)
+    # Split the received data into city name and distance
+    city_data = data.split()
+    city_name = city_data[0]
+    distance = city_data[1]
+
+    print(city_name, "is", distance)
 
     # Solve the TSPTW problem
-    result = solve_tsptw(city_data)
+    result = solve_tsptw(data)
 
     # Send the result back to the client
     client_socket.sendall(str(result).encode())
@@ -87,7 +90,7 @@ def start_server():
             client_socket, client_address = server_socket.accept()
             print("Connection established with", client_address)
 
-            # Create a new thread to handle the client
+            # Create a thread to handle the client
             client_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
             client_thread.start()
 
